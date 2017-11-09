@@ -1,4 +1,4 @@
-package com.example.android.pocketsinoptik.model.entities.five_days_weather;
+package com.example.android.pocketsinoptik.model.entities.sixteen_days_weather;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,8 +7,11 @@ import com.google.gson.annotations.SerializedName;
  * Created by fbrsw on 09.11.2017.
  */
 
-public class FiveDaysRespond {
+public class SixteenDaysWeatherResponse {
 
+    @SerializedName("city")
+    @Expose
+    private City city;
     @SerializedName("cod")
     @Expose
     private String cod;
@@ -21,9 +24,14 @@ public class FiveDaysRespond {
     @SerializedName("list")
     @Expose
     private java.util.List<List> list = null;
-    @SerializedName("city")
-    @Expose
-    private City city;
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
 
     public String getCod() {
         return cod;
@@ -55,14 +63,6 @@ public class FiveDaysRespond {
 
     public void setList(java.util.List<List> list) {
         this.list = list;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
     }
 
 }

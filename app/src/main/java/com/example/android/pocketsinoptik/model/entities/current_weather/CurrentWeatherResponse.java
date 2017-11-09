@@ -9,7 +9,7 @@ import java.util.List;
  * Created by fbrsw on 09.11.2017.
  */
 
-public class Respond {
+public class CurrentWeatherResponse {
 
     @SerializedName("coord")
     @Expose
