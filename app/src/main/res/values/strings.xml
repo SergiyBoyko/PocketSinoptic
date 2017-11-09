@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Pocket Sinoptik</string>
+    <string name="tab_layout_first">Today</string>
+    <string name="tab_layout_second">5 days</string>
+    <string name="tab_layout_third">16 days</string>
+    <string name="item_title">city</string>
+    <string name="item_desc">description</string>
+    <string name="dxetail_location">detail_loc</string>
+    <string name="detail_desc">detail_desc</string>
+</resources>
