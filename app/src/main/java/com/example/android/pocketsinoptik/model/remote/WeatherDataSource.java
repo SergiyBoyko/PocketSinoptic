@@ -1,6 +1,6 @@
 package com.example.android.pocketsinoptik.model.remote;
 
-import com.example.android.pocketsinoptik.api.OpenWeatherApi;
+import com.example.android.pocketsinoptik.api.OpenWeatherApiSet;
 import com.example.android.pocketsinoptik.model.entities.current_weather.CurrentWeatherResponse;
 import com.example.android.pocketsinoptik.model.entities.five_days_weather.FiveDaysWeatherResponse;
 import com.example.android.pocketsinoptik.model.entities.sixteen_days_weather.SixteenDaysWeatherResponse;
@@ -13,25 +13,25 @@ import rx.Observable;
 
 public class WeatherDataSource implements IWeatherDataSource {
 
-    OpenWeatherApi openWeatherApi;
+    OpenWeatherApiSet openWeatherApiSet;
 
-    public WeatherDataSource(OpenWeatherApi openWeatherApi) {
-        this.openWeatherApi = openWeatherApi;
+    public WeatherDataSource(OpenWeatherApiSet openWeatherApiSet) {
+        this.openWeatherApiSet = openWeatherApiSet;
     }
 
     @Override
     public Observable<CurrentWeatherResponse> getCurrentWeather(String city) {
-        return openWeatherApi.getCurrentWeather(city);
+        return openWeatherApiSet.getCurrentWeather(city);
     }
 
     @Override
     public Observable<FiveDaysWeatherResponse> getWeatherForFiveDays(String city) {
-        return openWeatherApi.getWeatherForFiveDays(city);
+        return openWeatherApiSet.getWeatherForFiveDays(city);
     }
 
     @Override
     public Observable<SixteenDaysWeatherResponse> getWeatherForSixteenDays(String city) {
-        return openWeatherApi.getWeatherForSixteenDays(city);
+        return openWeatherApiSet.getWeatherForSixteenDays(city);
     }
 
 }
