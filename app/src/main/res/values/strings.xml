@@ -7,4 +7,5 @@
     <string name="item_desc">description</string>
     <string name="dxetail_location">detail_loc</string>
     <string name="detail_desc">detail_desc</string>
+    <string name="request_execution_has_failed">Request execution has failed. Check your internet connection</string>
 </resources>
