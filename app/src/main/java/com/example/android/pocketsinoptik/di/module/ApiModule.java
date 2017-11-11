@@ -23,7 +23,8 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    public Retrofit provideRetrofitForDogs() {
+    @Named("openWeatherApi")
+    public Retrofit provideRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(Constants.OPEN_WEATHER_API)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -31,7 +32,9 @@ public class ApiModule {
                 .build();
     }
 
-    IWeatherDataSource provideWeatherDataSource(Retrofit retrofit) {
+    @Provides
+    @Singleton
+    IWeatherDataSource provideWeatherDataSource(@Named("openWeatherApi") Retrofit retrofit) {
         return new WeatherDataSource(retrofit.create(OpenWeatherApiSet.class));
     }
 }

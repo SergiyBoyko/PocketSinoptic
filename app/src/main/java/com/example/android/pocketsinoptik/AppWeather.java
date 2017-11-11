@@ -3,6 +3,7 @@ package com.example.android.pocketsinoptik;
 import android.support.multidex.MultiDexApplication;
 
 import com.example.android.pocketsinoptik.di.component.AppComponent;
+
 import com.example.android.pocketsinoptik.di.component.DaggerAppComponent;
 import com.example.android.pocketsinoptik.di.module.ApiModule;
 import com.example.android.pocketsinoptik.di.module.AppModule;

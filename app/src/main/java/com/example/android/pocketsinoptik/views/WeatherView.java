@@ -1,6 +1,9 @@
 package com.example.android.pocketsinoptik.views;
 
+import com.example.android.pocketsinoptik.model.entities.current_weather.CurrentWeatherResponse;
 import com.example.android.pocketsinoptik.model.entities.current_weather.Weather;
+import com.example.android.pocketsinoptik.model.entities.five_days_weather.FiveDaysWeatherResponse;
+import com.example.android.pocketsinoptik.model.entities.sixteen_days_weather.SixteenDaysWeatherResponse;
 
 import java.util.List;
 
@@ -10,10 +13,10 @@ import java.util.List;
 
 public interface WeatherView extends BaseView {
 
-    void showCurrentWeather(List<Weather> weather);
+    void showCurrentWeather(CurrentWeatherResponse response);
 
-    void showWeatherForFiveDays(List<com.example.android.pocketsinoptik.model.entities.five_days_weather.List> lists);
+    void showWeatherForFiveDays(FiveDaysWeatherResponse response);
 
-    void showWeatherForSixteenDays(List<com.example.android.pocketsinoptik.model.entities.sixteen_days_weather.List> lists);
+    void showWeatherForSixteenDays(SixteenDaysWeatherResponse response);
 
 }

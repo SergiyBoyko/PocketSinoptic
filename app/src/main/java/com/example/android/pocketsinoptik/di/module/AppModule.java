@@ -2,6 +2,7 @@ package com.example.android.pocketsinoptik.di.module;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -16,11 +17,11 @@ import dagger.Provides;
  */
 
 @Module
-public class AppModule {
+public final class AppModule {
 
     private Context context;
 
-    public AppModule(Context context) {
+    public AppModule(@NonNull Context context) {
         this.context = context;
     }
 
