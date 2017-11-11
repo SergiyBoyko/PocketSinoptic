@@ -21,7 +21,9 @@ public class Constants {
     public static final String DAY = "day";
     public static final String NIGHT = "night";
 
-    public static final String DATE_FORMAT = "dd.MM.yyyy";
+    public static final String SHORT_DATE_FORMAT = "dd.MM.yyyy";
+    public static final String EXPAND_DATE_FORMAT = "HH:mm dd.MM.yyyy EEEE";
+
     public static final String CELSIUS_ENDING = "°C";
 
     public static final String SUNNY_DAY_WEATHER = "Sunny";
