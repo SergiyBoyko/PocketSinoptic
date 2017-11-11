@@ -3,10 +3,11 @@
     <string name="tab_layout_first">Today</string>
     <string name="tab_layout_second">5 days</string>
     <string name="tab_layout_third">16 days</string>
-    <string name="item_title">city</string>
+    <string name="item_title">date</string>
     <string name="item_desc">description</string>
     <string name="dxetail_location">detail_loc</string>
     <string name="detail_desc">detail_desc</string>
     <string name="request_execution_has_failed">Request execution has failed. Check your internet connection</string>
     <string name="request_google_place_has_failed">Request city has failed. Check your internet connection or correct you city</string>
+    <string name="adapter_error">Error</string>
 </resources>
