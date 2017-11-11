@@ -9,11 +9,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.android.pocketsinoptik.AppWeather;
-import com.example.android.pocketsinoptik.Constants;
 import com.example.android.pocketsinoptik.R;
 import com.example.android.pocketsinoptik.di.component.AppComponent;
 import com.example.android.pocketsinoptik.di.component.DaggerPresentersComponent;
@@ -22,6 +20,7 @@ import com.example.android.pocketsinoptik.model.entities.current_weather.Current
 import com.example.android.pocketsinoptik.model.entities.five_days_weather.FiveDaysWeatherResponse;
 import com.example.android.pocketsinoptik.model.entities.sixteen_days_weather.SixteenDaysWeatherResponse;
 import com.example.android.pocketsinoptik.presenters.WeatherPresenter;
+import com.example.android.pocketsinoptik.utils.DataKeeper;
 import com.example.android.pocketsinoptik.views.WeatherView;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -33,11 +32,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 public class MainActivity extends AppCompatActivity implements WeatherView {
+
+    private CurrentWeatherFragment currentWeatherFragment;
+
+    private FiveDaysWeatherFragment fiveDaysWeatherFragment;
+
+    private SixteenDaysWeatherFragment sixteenDaysWeatherFragment;
+
+    private DataKeeper dataKeeper;
 
     @Inject
     WeatherPresenter weatherPresenter;
@@ -67,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements WeatherView {
 //
         weatherPresenter.setView(this);
 
+        dataKeeper = DataKeeper.getInstance();
+
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
@@ -74,7 +79,8 @@ public class MainActivity extends AppCompatActivity implements WeatherView {
             @Override
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
-                showToast(place.getName().toString());
+//                showToast(place.getName().toString());
+                weatherPresenter.getWeatherForSixteenDays(place.getName().toString());
             }
 
             @Override
@@ -84,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements WeatherView {
             }
         });
 
-//        weatherPresenter.getCurrentWeather("London");
     }
 
     @Override
@@ -94,18 +99,23 @@ public class MainActivity extends AppCompatActivity implements WeatherView {
 
     @Override
     public void showCurrentWeather(CurrentWeatherResponse response) {
-        showToast(response.getName());
+        dataKeeper.setCurrentWeatherResponse(response);
+        showToast(response.getName() + "showCurrentWeather");
     }
 
     @Override
     public void showWeatherForFiveDays(FiveDaysWeatherResponse response) {
-        showToast(response.getCity().getName());
+        dataKeeper.setFiveDaysWeatherResponse(response);
+        showToast(response.getCity().getName() + "showWeatherForFiveDays");
 
     }
 
     @Override
     public void showWeatherForSixteenDays(SixteenDaysWeatherResponse response) {
-        showToast(response.getCity().getName());
+        dataKeeper.setSixteenDaysWeatherResponse(response);
+        showToast(response.getCity().getName() + "showWeatherForSixteenDays");
+        sixteenDaysWeatherFragment.refreshInfo();
+//        sixteenDaysWeatherFragment.refreshInfo(response.getList());
     }
 
     public AppComponent getAppComponent() {
@@ -118,9 +128,12 @@ public class MainActivity extends AppCompatActivity implements WeatherView {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new CardContentFragment(), getResources().getString(R.string.tab_layout_first));
-        adapter.addFragment(new TileContentFragment(), getResources().getString(R.string.tab_layout_second));
-        adapter.addFragment(new ListContentFragment(), getResources().getString(R.string.tab_layout_third));
+        currentWeatherFragment = new CurrentWeatherFragment();
+        adapter.addFragment(currentWeatherFragment, getResources().getString(R.string.tab_layout_first));
+        fiveDaysWeatherFragment = new FiveDaysWeatherFragment();
+        adapter.addFragment(fiveDaysWeatherFragment, getResources().getString(R.string.tab_layout_second));
+        sixteenDaysWeatherFragment = new SixteenDaysWeatherFragment();
+        adapter.addFragment(sixteenDaysWeatherFragment , getResources().getString(R.string.tab_layout_third));
         viewPager.setAdapter(adapter);
     }
 
