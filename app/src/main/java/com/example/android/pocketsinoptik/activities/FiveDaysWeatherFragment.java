@@ -23,7 +23,7 @@ import com.example.android.pocketsinoptik.R;
  * Created by fbrsw on 08.11.2017.
  */
 
-public class ListContentFragment extends Fragment {
+public class FiveDaysWeatherFragment extends Fragment {
 
     @Nullable
     @Override
@@ -64,10 +64,14 @@ public class ListContentFragment extends Fragment {
         // Set numbers of List in RecyclerView.
         private static final int LENGTH = 18;
 
+
+
         private final String[] mPlaces;
         private final String[] mPlaceDesc;
         private final Drawable[] mPlaceAvators;
         private final Drawable[] mPlaceBgs;
+
+
 
         public ContentAdapter(Context context) {
             Resources resources = context.getResources();
