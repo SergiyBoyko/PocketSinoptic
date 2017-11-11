@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.android.pocketsinoptik.AppWeather;
@@ -22,6 +23,10 @@ import com.example.android.pocketsinoptik.model.entities.five_days_weather.FiveD
 import com.example.android.pocketsinoptik.model.entities.sixteen_days_weather.SixteenDaysWeatherResponse;
 import com.example.android.pocketsinoptik.presenters.WeatherPresenter;
 import com.example.android.pocketsinoptik.views.WeatherView;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,12 +57,6 @@ public class MainActivity extends AppCompatActivity implements WeatherView {
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
-//        Retrofit r = new Retrofit.Builder()
-//                .baseUrl(Constants.OPEN_WEATHER_API)
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-//                .build();
-
         DaggerPresentersComponent.builder()
                 .appComponent(getAppComponent())
                 .presentersModule(new PresentersModule())
@@ -67,7 +66,25 @@ public class MainActivity extends AppCompatActivity implements WeatherView {
 //        ButterKnife.bind(this);
 //
         weatherPresenter.setView(this);
-        weatherPresenter.getCurrentWeather("London");
+
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                showToast(place.getName().toString());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                showToast(getString(R.string.request_google_place_has_failed));
+            }
+        });
+
+//        weatherPresenter.getCurrentWeather("London");
     }
 
     @Override
@@ -97,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements WeatherView {
 
     private void showToast(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
-        Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
     }
 
     private void setupViewPager(ViewPager viewPager) {
