@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import com.example.android.pocketsinoptik.Constants;
 import com.example.android.pocketsinoptik.R;
+import com.example.android.pocketsinoptik.utils.DataKeeper;
+import com.example.android.pocketsinoptik.widgets.adapters.FiveDaysContentAdapter;
 
 /**
  * Created by fbrsw on 08.11.2017.
@@ -25,90 +27,32 @@ import com.example.android.pocketsinoptik.R;
 
 public class FiveDaysWeatherFragment extends Fragment {
 
+    private FiveDaysContentAdapter adapter;
+
+    private RecyclerView recyclerView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        RecyclerView recyclerView = (RecyclerView) inflater.inflate(
+        recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.recycler_view, container, false);
-        ContentAdapter adapter = new ContentAdapter(recyclerView.getContext());
+
+        DataKeeper dataKeeper = DataKeeper.getInstance();
+        if (dataKeeper.getFiveDaysWeatherResponse() != null)
+            adapter = new FiveDaysContentAdapter(recyclerView.getContext(), dataKeeper.getFiveDaysWeatherResponse().getList());
+        else adapter = new FiveDaysContentAdapter(recyclerView.getContext(), null);
+
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return recyclerView;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView avator;
-        public ImageView bg;
-        public TextView name;
-        public TextView description;
-        public ViewHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.item_small_list, parent, false));
-            avator = (ImageView) itemView.findViewById(R.id.list_avatar);
-            bg = (ImageView) itemView.findViewById(R.id.background_weather);
-            name = (TextView) itemView.findViewById(R.id.list_title);
-            description = (TextView) itemView.findViewById(R.id.list_desc);
-            itemView.setOnClickListener(v -> {
-                Context context = v.getContext();
-                Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(Constants.EXTRA_POSITION, getAdapterPosition());
-                context.startActivity(intent);
-            });
-        }
+    public void refreshInfo() {
+        DataKeeper dataKeeper = DataKeeper.getInstance();
+        if (dataKeeper.getFiveDaysWeatherResponse() != null)
+            adapter.setList(dataKeeper.getFiveDaysWeatherResponse().getList());
+        adapter.notifyDataSetChanged();
     }
 
-    /**
-     * Adapter to display recycler view.
-     */
-    public static class ContentAdapter extends RecyclerView.Adapter<ViewHolder> {
-        // Set numbers of List in RecyclerView.
-        private static final int LENGTH = 18;
-
-
-
-        private final String[] mPlaces;
-        private final String[] mPlaceDesc;
-        private final Drawable[] mPlaceAvators;
-        private final Drawable[] mPlaceBgs;
-
-
-
-        public ContentAdapter(Context context) {
-            Resources resources = context.getResources();
-            mPlaces = resources.getStringArray(R.array.places);
-            mPlaceDesc = resources.getStringArray(R.array.place_desc);
-            TypedArray a = resources.obtainTypedArray(R.array.place_avator);
-            mPlaceAvators = new Drawable[a.length()];
-            for (int i = 0; i < mPlaceAvators.length; i++) {
-                mPlaceAvators[i] = a.getDrawable(i);
-            }
-
-            TypedArray b = resources.obtainTypedArray(R.array.places_picture);
-            mPlaceBgs = new Drawable[b.length()];
-            for (int i = 0; i < mPlaceAvators.length; i++) {
-                mPlaceBgs[i] = b.getDrawable(i);
-            }
-
-            a.recycle();
-            b.recycle();
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()), parent);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.avator.setImageDrawable(mPlaceAvators[position % mPlaceAvators.length]);
-            holder.bg.setImageDrawable(mPlaceBgs[position % mPlaceBgs.length]);
-            holder.name.setText(mPlaces[position % mPlaces.length]);
-            holder.description.setText(mPlaceDesc[position % mPlaceDesc.length]);
-        }
-
-        @Override
-        public int getItemCount() {
-            return LENGTH;
-        }
-    }
 }
