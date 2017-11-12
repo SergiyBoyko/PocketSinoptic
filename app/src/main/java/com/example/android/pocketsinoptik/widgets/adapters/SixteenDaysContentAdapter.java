@@ -46,10 +46,10 @@ public class SixteenDaysContentAdapter extends RecyclerView.Adapter<SixteenDaysC
             holder.avator.setImageDrawable(pack.getIcon());
             holder.bg.setImageDrawable(pack.getBackGround());
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.ENGLISH);
+            SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.SHORT_DATE_FORMAT, Locale.ENGLISH);
             long ms = list.get(position).getDt() * 1000;
 
-            holder.name.setText(dateFormat.format(new Date(ms)));
+            holder.date.setText(dateFormat.format(new Date(ms)));
             holder.description.setText(pack.getDescription());
 
             double temp = list.get(position).getTemp().getDay();
@@ -64,11 +64,7 @@ public class SixteenDaysContentAdapter extends RecyclerView.Adapter<SixteenDaysC
             temperature = "min " +  String.valueOf((int) temp) + Constants.CELSIUS_ENDING;
             holder.minTemperature.setText(String.valueOf(temperature));
 
-        } catch (Exception e) {
-            holder.avator.setImageDrawable(context.getResources().getDrawable(R.drawable.na));
-            holder.bg.setImageDrawable(context.getResources().getDrawable(R.drawable.na));
-            holder.name.setText(context.getString(R.string.adapter_error));
-            holder.description.setText(context.getString(R.string.adapter_error));
+        } catch (Exception ignored) {
         }
     }
 
@@ -82,20 +78,20 @@ public class SixteenDaysContentAdapter extends RecyclerView.Adapter<SixteenDaysC
         this.list = list;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView avator;
-        public ImageView bg;
-        public TextView name;
-        public TextView description;
-        public TextView temperature;
-        public TextView maxTemperature;
-        public TextView minTemperature;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        private ImageView avator;
+        private ImageView bg;
+        private TextView date;
+        private TextView description;
+        private TextView temperature;
+        private TextView maxTemperature;
+        private TextView minTemperature;
 
-        public ViewHolder(LayoutInflater inflater, ViewGroup parent) {
+        ViewHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.item_large_list, parent, false));
             avator = (ImageView) itemView.findViewById(R.id.list_avatar);
             bg = (ImageView) itemView.findViewById(R.id.background_weather);
-            name = (TextView) itemView.findViewById(R.id.list_title);
+            date = (TextView) itemView.findViewById(R.id.list_title);
             description = (TextView) itemView.findViewById(R.id.list_desc);
             temperature = (TextView) itemView.findViewById(R.id.degree);
             maxTemperature = (TextView) itemView.findViewById(R.id.max_temperature);

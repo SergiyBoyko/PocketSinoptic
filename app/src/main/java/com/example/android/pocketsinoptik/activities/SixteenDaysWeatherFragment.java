@@ -28,7 +28,6 @@ public class SixteenDaysWeatherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.recycler_view, container, false);
-        Toast.makeText(recyclerView.getContext(), "rebuild", Toast.LENGTH_LONG).show();
 
         DataKeeper dataKeeper = DataKeeper.getInstance();
         if (dataKeeper.getSixteenDaysWeatherResponse() != null)
