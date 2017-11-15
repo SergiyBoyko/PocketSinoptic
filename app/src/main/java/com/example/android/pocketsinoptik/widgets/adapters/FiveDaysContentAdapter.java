@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.pocketsinoptik.Constants;
 import com.example.android.pocketsinoptik.R;
 import com.example.android.pocketsinoptik.activities.DetailActivity;
 import com.example.android.pocketsinoptik.model.entities.five_days_weather.List;
+import com.example.android.pocketsinoptik.utils.DataKeeper;
 import com.example.android.pocketsinoptik.utils.ImagePack;
 import com.example.android.pocketsinoptik.utils.ImageSelector;
 
@@ -72,7 +74,7 @@ public class FiveDaysContentAdapter extends RecyclerView.Adapter<FiveDaysContent
         this.list = list;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView avator;
         private ImageView bg;
         private TextView date;
@@ -88,10 +90,28 @@ public class FiveDaysContentAdapter extends RecyclerView.Adapter<FiveDaysContent
             temperature = (TextView) itemView.findViewById(R.id.degree);
 
             itemView.setOnClickListener(v -> {
+
                 Context context = v.getContext();
-                Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(Constants.EXTRA_POSITION, getAdapterPosition());
-                context.startActivity(intent);
+                try {
+                    DataKeeper dataKeeper = DataKeeper.getInstance();
+                    if (list == null || dataKeeper.getFiveDaysWeatherResponse() == null) return;
+
+                    int index = getAdapterPosition();
+
+                    Intent intent = new Intent(context, DetailActivity.class);
+                    intent.putExtra(Constants.CITY, dataKeeper.getFiveDaysWeatherResponse().getCity().getName());
+
+                    intent.putExtra(Constants.DATE, list.get(index).getDt() * 1000);
+
+                    String temp = String.valueOf(list.get(index).getMain().getTemp()) + Constants.CELSIUS_ENDING;
+                    intent.putExtra(Constants.TEMPERATURE, temp);
+
+                    intent.putExtra(Constants.WEATHER_ID, list.get(index).getWeather().get(0).getId());
+                    context.startActivity(intent);
+                } catch (Exception e) {
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
             });
         }
     }
