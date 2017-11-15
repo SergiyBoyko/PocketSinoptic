@@ -13,8 +13,29 @@ import android.widget.TextView;
 
 import com.example.android.pocketsinoptik.Constants;
 import com.example.android.pocketsinoptik.R;
+import com.example.android.pocketsinoptik.utils.ImagePack;
+import com.example.android.pocketsinoptik.utils.ImageSelector;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
+
+    @BindView(R.id.desc)
+    TextView descField;
+
+    @BindView(R.id.temperature)
+    TextView tempField;
+
+    @BindView(R.id.date)
+    TextView dateField;
+
+    @BindView(R.id.image)
+    ImageView image;
 
 
     @Override
@@ -27,27 +48,29 @@ public class DetailActivity extends AppCompatActivity {
         // Set Collapsing Toolbar layout to the screen
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        // Set title of Detail page
-        // collapsingToolbar.setTitle(getString(R.string.item_title));
 
-        int postion = getIntent().getIntExtra(Constants.EXTRA_POSITION, 0);
-        Resources resources = getResources();
-        String[] places = resources.getStringArray(R.array.places);
-        collapsingToolbar.setTitle(places[postion % places.length]);
+        ButterKnife.bind(this);
 
-        String[] placeDetails = resources.getStringArray(R.array.place_details);
-        TextView placeDetail = (TextView) findViewById(R.id.place_detail);
-        placeDetail.setText(placeDetails[postion % placeDetails.length]);
+        String cityName = getIntent().getStringExtra(Constants.CITY);
+        long ms = getIntent().getLongExtra(Constants.DATE, 0L);
+        Date date = new Date(ms);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.EXPAND_DATE_FORMAT, Locale.ENGLISH);
+        String timeDate = dateFormat.format(date);
+        String temperature = getIntent().getStringExtra(Constants.TEMPERATURE);
+        int weatherId = getIntent().getIntExtra(Constants.WEATHER_ID, 0);
+        String dayPart = (date.getHours() > 7 && date.getHours() < 19) ? Constants.DAY : Constants.NIGHT;
+        ImagePack pack = ImageSelector.getImagePackById(this, weatherId, dayPart);
 
-        String[] placeLocations = resources.getStringArray(R.array.place_locations);
-        TextView placeLocation = (TextView) findViewById(R.id.place_location);
-        placeLocation.setText(placeLocations[postion % placeLocations.length]);
+        collapsingToolbar.setTitle(cityName);
 
-        TypedArray placePictures = resources.obtainTypedArray(R.array.places_picture);
-        ImageView placePicutre = (ImageView) findViewById(R.id.image);
-        placePicutre.setImageDrawable(placePictures.getDrawable(postion % placePictures.length()));
+        descField.setText(pack.getDescription());
 
-        placePictures.recycle();
+        tempField.setText(temperature);
+
+        dateField.setText(timeDate);
+
+        image.setImageDrawable(pack.getBackGround());
+
     }
 
     @Override
