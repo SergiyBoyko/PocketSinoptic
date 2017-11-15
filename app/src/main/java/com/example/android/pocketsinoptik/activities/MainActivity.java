@@ -23,6 +23,7 @@ import com.example.android.pocketsinoptik.presenters.WeatherPresenter;
 import com.example.android.pocketsinoptik.utils.DataKeeper;
 import com.example.android.pocketsinoptik.views.WeatherView;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
@@ -65,9 +66,7 @@ public class MainActivity extends AppCompatActivity implements WeatherView {
                 .presentersModule(new PresentersModule())
                 .build()
                 .inject(this);
-//
-//        ButterKnife.bind(this);
-//
+
         weatherPresenter.setView(this);
 
         dataKeeper = DataKeeper.getInstance();
@@ -81,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements WeatherView {
                 // TODO: Get info about the selected place.
 //                showToast(place.getName().toString());
                 weatherPresenter.getWeatherForSixteenDays(place.getName().toString());
+                weatherPresenter.getWeatherForFiveDays(place.getName().toString());
+                weatherPresenter.getCurrentWeather(place.getName().toString());
             }
 
             @Override
@@ -89,6 +90,13 @@ public class MainActivity extends AppCompatActivity implements WeatherView {
                 showToast(getString(R.string.request_google_place_has_failed));
             }
         });
+
+        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+                .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
+                .build();
+
+        autocompleteFragment.setFilter(typeFilter);
+
 
     }
 
@@ -100,22 +108,20 @@ public class MainActivity extends AppCompatActivity implements WeatherView {
     @Override
     public void showCurrentWeather(CurrentWeatherResponse response) {
         dataKeeper.setCurrentWeatherResponse(response);
-        showToast(response.getName() + "showCurrentWeather");
+        currentWeatherFragment.refreshInfo();
     }
 
     @Override
     public void showWeatherForFiveDays(FiveDaysWeatherResponse response) {
         dataKeeper.setFiveDaysWeatherResponse(response);
-        showToast(response.getCity().getName() + "showWeatherForFiveDays");
+        fiveDaysWeatherFragment.refreshInfo();
 
     }
 
     @Override
     public void showWeatherForSixteenDays(SixteenDaysWeatherResponse response) {
         dataKeeper.setSixteenDaysWeatherResponse(response);
-        showToast(response.getCity().getName() + "showWeatherForSixteenDays");
         sixteenDaysWeatherFragment.refreshInfo();
-//        sixteenDaysWeatherFragment.refreshInfo(response.getList());
     }
 
     public AppComponent getAppComponent() {
