@@ -10,4 +10,5 @@
     <string name="request_execution_has_failed">Request execution has failed. Check your internet connection</string>
     <string name="request_google_place_has_failed">Request city has failed. Check your internet connection or correct you city</string>
     <string name="adapter_error">Error</string>
+    <string name="insert_your_city">Insert your city</string>
 </resources>
